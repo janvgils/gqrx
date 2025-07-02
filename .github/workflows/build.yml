@@ -239,6 +239,17 @@ jobs:
           -DINSTALL_UDEV_RULES=OFF
         cmake --build build
         cmake --install build
+    - name: Clone and build rfone_host
+      working-directory: ${{ runner.temp }}
+      run: |
+        git clone https://github.com/hydrasdr/rfone_host.git
+        cd rfone_host
+        cmake -S . -B build \
+          -G "MinGW Makefiles" \
+          -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+          -DCMAKE_INSTALL_PREFIX=${RUNNER_TEMP}/msys64/mingw64
+        cmake --build build
+        cmake --install build
     - name: Clone and build airspyone_host
       working-directory: ${{ runner.temp }}
       run: |
