@@ -197,6 +197,7 @@ jobs:
           cmake:p
           ninja:p
           libusb:p
+          libwinpthread:p
           boost:p
           qt6-base:p
           qt6-svg:p
