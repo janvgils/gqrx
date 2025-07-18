@@ -51,7 +51,7 @@ jobs:
             libgl-dev
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Build gr-osmosdr
+      - name: Build gr-osmosdr from HydraSDR repo
         run: |
           git clone --depth 1 git@github.com:hydrasdr/gr-osmosdr.git
           cd gr-osmosdr
