@@ -26,6 +26,7 @@ jobs:
           apt-get update -qq
           apt-get install -y \
             cmake \
+            git \
             libboost-dev \
             libpulse-dev \
             portaudio19-dev \
