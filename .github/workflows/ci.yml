@@ -32,7 +32,6 @@ jobs:
             libsndfile-dev \
             liblog4cpp5-dev \
             gnuradio-dev \
-            gr-osmosdr \
             liborc-0.4-dev \
             appstream \
             desktop-file-utils
@@ -52,6 +51,15 @@ jobs:
             libgl-dev
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Build gr-osmosdr
+        run: |
+          git clone --depth 1 git@github.com:hydrasdr/gr-osmosdr.git
+          cd gr-osmosdr
+          mkdir build
+          cd build
+          cmake ../
+          make -j4
+          make install
       - name: Configure
         run: |
           mkdir build
@@ -145,7 +153,7 @@ jobs:
     - name: Clone and build gr-osmosdr
       working-directory: ${{ runner.temp }}
       run: |
-        git clone https://gitea.osmocom.org/sdr/gr-osmosdr.git
+        git clone https://github.com/hydrasdr/gr-osmosdr.git
         cd gr-osmosdr
         cmake -S . -B build \
           -DCMAKE_INSTALL_PREFIX=${RUNNER_TEMP}/msys64/mingw64 \
