@@ -54,7 +54,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Build gr-osmosdr from HydraSDR repo
         run: |
-          git clone --depth 1 git@github.com:hydrasdr/gr-osmosdr.git
+          git clone --depth 1 https://github.com/hydrasdr/gr-osmosdr.git
           cd gr-osmosdr
           mkdir build
           cd build
