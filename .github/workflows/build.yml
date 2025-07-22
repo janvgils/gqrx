@@ -197,6 +197,7 @@ jobs:
           cmake:p
           ninja:p
           libusb:p
+          libpthread:p
           boost:p
           qt6-base:p
           qt6-svg:p
@@ -271,6 +272,7 @@ jobs:
         cmake -S . -B build \
           -G "MinGW Makefiles" \
           -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+          -DLIBUSB_INCLUDE_DIR=/mingw64/include/libusb-1.0 \
           -DCMAKE_INSTALL_PREFIX=${RUNNER_TEMP}/msys64/mingw64
         cmake --build build
         cmake --install build
