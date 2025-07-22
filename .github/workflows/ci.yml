@@ -45,6 +45,15 @@ jobs:
             libgl-dev
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Build rfone_host and library from HydraSDR repo
+        run: |
+          git clone --depth 1 https://github.com/hydrasdr/rfone_host.git
+          cd rfone_host
+          mkdir build
+          cd build
+          cmake ../
+          make -j4
+          make install
       - name: Build gr-osmosdr from HydraSDR repo
         run: |
           git clone --depth 1 https://github.com/hydrasdr/gr-osmosdr.git

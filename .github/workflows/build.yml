@@ -263,6 +263,17 @@ jobs:
           -DTHREADS_PTHREADS_WIN32_LIBRARY=${RUNNER_TEMP}/msys64/mingw64/lib/libpthread.a
         cmake --build build
         cmake --install build
+    - name: Clone and build rfone_host
+      working-directory: ${{ runner.temp }}
+      run: |
+        git clone https://github.com/hydrasdr/rfone_host.git
+        cd rfone_host
+        cmake -S . -B build \
+          -G "MinGW Makefiles" \
+          -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+          -DCMAKE_INSTALL_PREFIX=${RUNNER_TEMP}/msys64/mingw64
+        cmake --build build
+        cmake --install build
     - name: Clone and build gr-osmosdr
       working-directory: ${{ runner.temp }}
       run: |
@@ -274,6 +285,7 @@ jobs:
           -DENABLE_DEFAULT=OFF \
           -DENABLE_AIRSPY=ON \
           -DENABLE_AIRSPYHF=ON \
+          -DENABLE_HYDRASDR=ON \
           -DENABLE_FILE=ON \
           -DENABLE_REDPITAYA=ON \
           -DENABLE_RTL=ON \
