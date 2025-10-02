@@ -197,6 +197,7 @@ jobs:
           cmake:p
           ninja:p
           libusb:p
+          libpthread:p
           boost:p
           qt6-base:p
           qt6-svg:p
@@ -274,10 +275,22 @@ jobs:
           -DTHREADS_PTHREADS_WIN32_LIBRARY=${RUNNER_TEMP}/msys64/mingw64/lib/libpthread.a
         cmake --build build
         cmake --install build
+    - name: Clone and build rfone_host
+      working-directory: ${{ runner.temp }}
+      run: |
+        git clone https://github.com/hydrasdr/rfone_host.git
+        cd rfone_host
+        cmake -S . -B build \
+          -G "MinGW Makefiles" \
+          -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+          -DLIBUSB_INCLUDE_DIR=/mingw64/include/libusb-1.0 \
+          -DCMAKE_INSTALL_PREFIX=${RUNNER_TEMP}/msys64/mingw64
+        cmake --build build
+        cmake --install build
     - name: Clone and build gr-osmosdr
       working-directory: ${{ runner.temp }}
       run: |
-        git clone https://gitea.osmocom.org/sdr/gr-osmosdr.git
+        git clone https://github.com/hydrasdr/gr-osmosdr.git
         cd gr-osmosdr
         cmake -S . -B build \
           -DCMAKE_INSTALL_PREFIX=${RUNNER_TEMP}/msys64/mingw64 \
@@ -285,6 +298,7 @@ jobs:
           -DENABLE_DEFAULT=OFF \
           -DENABLE_AIRSPY=ON \
           -DENABLE_AIRSPYHF=ON \
+          -DENABLE_HYDRASDR=ON \
           -DENABLE_FILE=ON \
           -DENABLE_REDPITAYA=ON \
           -DENABLE_RTL=ON \

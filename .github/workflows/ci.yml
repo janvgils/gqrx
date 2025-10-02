@@ -8,7 +8,6 @@ jobs:
     strategy:
       matrix:
         image:
-          - "ubuntu:20.04"
           - "ubuntu:22.04"
           - "ubuntu:24.04"
         backend:
@@ -26,22 +25,16 @@ jobs:
           apt-get update -qq
           apt-get install -y \
             cmake \
+            git \
             libboost-dev \
             libpulse-dev \
             portaudio19-dev \
             libsndfile-dev \
             liblog4cpp5-dev \
             gnuradio-dev \
-            gr-osmosdr \
             liborc-0.4-dev \
             appstream \
             desktop-file-utils
-      - name: Install Qt5
-        if: matrix.image == 'ubuntu:20.04'
-        run: |
-          apt-get install -y \
-            qt5-default \
-            libqt5svg5-dev
       - name: Install Qt6
         if: matrix.image != 'ubuntu:20.04'
         run: |
@@ -52,6 +45,24 @@ jobs:
             libgl-dev
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Build rfone_host and library from HydraSDR repo
+        run: |
+          git clone --depth 1 https://github.com/hydrasdr/rfone_host.git
+          cd rfone_host
+          mkdir build
+          cd build
+          cmake ../
+          make -j4
+          make install
+      - name: Build gr-osmosdr from HydraSDR repo
+        run: |
+          git clone --depth 1 https://github.com/hydrasdr/gr-osmosdr.git
+          cd gr-osmosdr
+          mkdir build
+          cd build
+          cmake ../
+          make -j4
+          make install
       - name: Configure
         run: |
           mkdir build
@@ -116,6 +127,7 @@ jobs:
           cmake:p
           ninja:p
           libusb:p
+          libpthread:p
           boost:p
           qt6-base:p
           qt6-svg:p
@@ -145,7 +157,7 @@ jobs:
     - name: Clone and build gr-osmosdr
       working-directory: ${{ runner.temp }}
       run: |
-        git clone https://gitea.osmocom.org/sdr/gr-osmosdr.git
+        git clone https://github.com/hydrasdr/gr-osmosdr.git
         cd gr-osmosdr
         cmake -S . -B build \
           -DCMAKE_INSTALL_PREFIX=${RUNNER_TEMP}/msys64/mingw64 \
